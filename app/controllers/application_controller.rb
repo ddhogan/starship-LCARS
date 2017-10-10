@@ -12,7 +12,7 @@ class ApplicationController < Sinatra::Base
   end
 
   post "/signup" do
-    @user = User.create(name: params[:username], password: params[:password])
+    @agent = Agent.create(name: params[:username], password: params[:password])
     redirect "/main"
   end
 
