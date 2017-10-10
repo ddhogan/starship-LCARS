@@ -11,26 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171009030248) do
+ActiveRecord::Schema.define(version: 20171010221302) do
 
   create_table "agents", force: :cascade do |t|
-    t.string  "name"
-    t.integer "ship_id"
-  end
-
-  create_table "empires", force: :cascade do |t|
-    t.string  "name"
-    t.integer "ship_id"
-    t.integer "agent_id"
+    t.string "username"
+    t.string "password_digest"
   end
 
   create_table "ships", force: :cascade do |t|
-    t.string  "name"
-    t.integer "agent_id"
-    t.integer "empire_id"
     t.string  "type_class"
-    t.decimal "speed"
+    t.string  "sub_class"
+    t.decimal "top_speed"
     t.integer "crew"
+    t.string  "affiliation"
+    t.integer "agent_id"
+    t.string  "note"
   end
 
 end
