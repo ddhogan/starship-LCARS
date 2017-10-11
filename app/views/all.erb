@@ -4,15 +4,13 @@
 
     <div class="content">
       <ul>
-      <% @ship.each do |ship|%>
-        <li><%= ship.name%>: <%= ship.empire%></li>
+      <% @ships.each do |ship|%>
+        <li><%= ship.type_class%>: <%= ship.affiliation%> <a href="/show/<%= ship.id%>">Details</a></li>
       <% end%>
       </ul>
     </div>
 
     <a href="/"><button><h4>Home</h4></button></a>
     <br></br>
-    <p>Already a user? <a href="/login"><button><h4>Login</h4></button></a></p>
-
   </div>
 </div>

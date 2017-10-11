@@ -1,0 +1,23 @@
+<div class="container">
+<div class="col-md-8 col-md-offset-2">
+  <h2>Details for the <%= @ship.type_class%> vessel</h2>
+
+  <div class="content">
+    <ul>
+        <li>Affiliation: <%= @ship.affiliation%></li>
+        <li>Type/class: <%= @ship.type_class%></li>
+        <li>Sub-class: <%= @ship.sub_class%></li>
+        <li>Top speed, warp factor: <%= @ship.top_speed%></li>
+        <li>Crew complement: <%= @ship.crew%></li>
+        <li>Notes: <%= @ship.note%></li>
+
+        <li>Reference Agent: <%= %></li>
+    </ul>
+  </div>
+
+  <a href="/all"><button><h4>Return to index</h4></button></a>
+  <a href="/"><button><h4>Home</h4></button></a>
+  <br></br>
+
+</div>
+</div>
