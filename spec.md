@@ -7,7 +7,7 @@ Specs:
 - [X] ~~*Include at least one has_many relationship (x has_many y e.g. User has_many Posts)*~~
 - [X] ~~*Include user accounts*~~
 - [X] ~~*Ensure that users can't modify content created by other users*~~
-- [ ] Include user input validations
+- [X] ~~*Include user input validations*~~
 - [X] ~~*Display validation failures to user with error message (example form URL e.g. /posts/new)*~~
 - [X] ~~*Your README.md includes a short description, install instructions, a contributors guide and a link to the license for your code*~~
 
@@ -20,4 +20,4 @@ Confirm
 
 To Do (possibly)
 
-* [ ] make a helper method to validate data (mandatory fields filled in, and correct data type)
+* [ ] extract validation logic into a helper method in the Ship class to validate data (mandatory fields filled in, and correct data type (especially the warp factor))
