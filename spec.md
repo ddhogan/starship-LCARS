@@ -19,7 +19,5 @@ Confirm
 
 
 To Do
-* [ ] add all the additional fields to erb new, edit, and ship, plus corresponding routes
-* [ ] mark mandatory fields in new and edit
+* [ ] update routes for new and edit to include the additional fields
 * [ ] make a helper method to validate data (mandatory fields filled in, and correct data type)
-* [ ] add flash messages for errors when fields are left empty, or data is incorrect format

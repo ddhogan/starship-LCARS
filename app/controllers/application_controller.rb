@@ -25,7 +25,7 @@ class ApplicationController < Sinatra::Base
       redirect "/all"
       @agent.save
     else
-      # flash message about mandatory fields
+      flash[:message] = "Both fields must be completed."
       redirect "/signup"
     end
   end
@@ -40,9 +40,10 @@ class ApplicationController < Sinatra::Base
   end
 
   post "/all" do
-    if !params["type_class"].empty? && !params["affiliation"].empty?
+    if !params["ship"]["type_class"].empty? && !params["ship"]["affiliation"].empty?
       @agent = Helpers.current_agent(session)
-      @ship = Ship.create(type_class: params["type_class"], top_speed: params["top_speed"], crew: params["crew"], affiliation: params["affiliation"])
+      # binding.pry
+      @ship = Ship.create(params[:ship])
       @ship.agent_id = @agent.id
       @ship.save
       redirect "/all"
@@ -92,10 +93,10 @@ class ApplicationController < Sinatra::Base
 
   post "/ship/:id/edit" do
     # binding.pry
-    if !params["type_class"].empty? && !params["affiliation"].empty?
+    if !params["ship"]["type_class"].empty? && !params["ship"]["affiliation"].empty?
       @ship = Ship.find_by(id=params[:id])
       @agent = Helpers.current_agent(session)
-      @ship.update(type_class: params["type_class"], top_speed: params["top_speed"], crew: params["crew"], affiliation: params["affiliation"])
+      @ship.update(params["ship"])
       @ship.agent_id = @agent.id
       @ship.save
       redirect "/all"
@@ -142,10 +143,10 @@ class ApplicationController < Sinatra::Base
 
   get "/logout" do
     if Helpers.is_logged_in?(session)
-      session.clear # @agent is now logged out
+      session.clear
+      flash[:message] = "You have been logged out."
+      redirect '/'
     end
-    flash[:message] = "You have been logged out."
-    redirect '/'
   end
 
   get "/" do
