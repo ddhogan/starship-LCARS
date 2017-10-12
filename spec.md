@@ -8,7 +8,7 @@ Specs:
 - [X] ~~*Include user accounts*~~
 - [X] ~~*Ensure that users can't modify content created by other users*~~
 - [ ] Include user input validations
-- [ ] Display validation failures to user with error message (example form URL e.g. /posts/new)
+- [X] ~~*Display validation failures to user with error message (example form URL e.g. /posts/new)*~~
 - [X] ~~*Your README.md includes a short description, install instructions, a contributors guide and a link to the license for your code*~~
 
 Confirm
@@ -18,6 +18,6 @@ Confirm
 - [X] ~~*You don't include changes in a commit that aren't related to the commit message*~~
 
 
-To Do
-* [ ] update routes for new and edit to include the additional fields
+To Do (possibly)
+
 * [ ] make a helper method to validate data (mandatory fields filled in, and correct data type)

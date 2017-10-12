@@ -43,12 +43,14 @@ class ApplicationController < Sinatra::Base
     if !params["ship"]["type_class"].empty? && !params["ship"]["affiliation"].empty?
       @agent = Helpers.current_agent(session)
       # binding.pry
+
       @ship = Ship.create(params[:ship])
+
       @ship.agent_id = @agent.id
       @ship.save
       redirect "/all"
     else
-      # flash message about data validation
+      flash[:message] = "Confirm that all mandatory fields have been filled."
       redirect "/new"
     end
   end
@@ -91,15 +93,19 @@ class ApplicationController < Sinatra::Base
     end
   end
 
-  post "/ship/:id/edit" do
+  patch "/ship/:id" do
     # binding.pry
     if !params["ship"]["type_class"].empty? && !params["ship"]["affiliation"].empty?
-      @ship = Ship.find_by(id=params[:id])
+      @ship = Ship.find_by(id: params[:id])
       @agent = Helpers.current_agent(session)
+      
       @ship.update(params["ship"])
       @ship.agent_id = @agent.id
       @ship.save
       redirect "/all"
+    else
+      flash[:message] = "Confirm that all mandatory fields have been filled."
+      redirect "/ship/#{@ship.id}/edit"
     end
   end
 

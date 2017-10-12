@@ -3,7 +3,8 @@
   <h2>Edit information about this vessel</h2>
 
   <div class="content">
-    <form method="post" action="/ship/<%= @ship.id%>/edit">
+    <form method="post" action="/ship/<%= @ship.id%>">
+    <input id="hidden" type="hidden" name="_method" value="patch">
         <label>Type/class: </label><input name="ship[type_class]" type="text" value="<%= @ship.type_class%>">*<br>
         <label>Sub-class: </label><input name="ship[sub_class]" type="text" value="<%= @ship.sub_class%>"><br>
         <label>Top Speed (warp factor): </label><input name="ship[top_speed]" type="text" value="<%= @ship.top_speed%>"><br>
