@@ -1,17 +1,16 @@
 <div class="container">
 <div class="col-md-8 col-md-offset-2">
-  <h2>Edit information about this vessel</h2>
+  <h2>Delete this record</h2>
 
   <div class="content">
-    <form method="post" action="/ship/<%= @ship.id%>/edit">
+    <form method="post" action="/ship/<%= @ship.id%>/delete">
         <label>Type/class: </label><input name="type_class" type="text" value="<%= @ship.type_class%>"><br>
         <label>Top Speed (warp factor): </label><input name="top_speed" type="text" value="<%= @ship.top_speed%>"></br>
         <label>Crew complement: </label><input name="crew" type="text" value="<%= @ship.crew%>"></br>
         <label>Affiliation or Empire: </label><input name="affiliation" type="text" value="<%= @ship.affiliation%>"></br>
         <br>
-        <input name="submit" type="submit">
-    </form>
-    <h3>Or, delete this record <a href="/ship/<%= @ship.id%>/delete"><button><h4>Delete</h4></button></a></h3>    
+        <h3>This action cannot be undone <input name="submit" type="submit" value="Delete"></h3>
+    </form>   
 
   </div>
 

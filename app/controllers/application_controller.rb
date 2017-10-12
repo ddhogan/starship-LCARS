@@ -24,6 +24,7 @@ class ApplicationController < Sinatra::Base
       redirect "/all"
       @agent.save
     else
+      # flash message about mandatory fields
       redirect "/signup"
     end
   end
@@ -32,6 +33,7 @@ class ApplicationController < Sinatra::Base
     if Helpers.is_logged_in?(session)
       erb :new
     else
+      # flash message about being logged in
       redirect "/login"
     end
   end
@@ -43,6 +45,9 @@ class ApplicationController < Sinatra::Base
       @ship.agent_id = @agent.id
       @ship.save
       redirect "/all"
+    else
+      # flash message about data validation
+      redirect "/new"
     end
   end
 
@@ -57,6 +62,7 @@ class ApplicationController < Sinatra::Base
       session[:id] = @agent.id # @agent is now logged in
       redirect '/all'
     else
+      # flash message about must be logged in
       erb :login
     end
   end
@@ -66,7 +72,57 @@ class ApplicationController < Sinatra::Base
       @ships = Ship.all
       erb :"/all"
     else
+      # flash message about must be logged in
       redirect "/login"
+    end
+  end
+
+  get "/ship/:id/edit" do
+    @agent = Helpers.current_agent(session)
+    @ship = Ship.find_by(id: params[:id])
+    # binding.pry
+    if Helpers.is_logged_in?(session) && @ship.agent_id == @agent.id
+      erb :edit
+    else
+      # flash message about not owning the record
+      redirect "/ship/:id"
+    end
+  end
+
+  post "/ship/:id/edit" do
+    # binding.pry
+    if !params["type_class"].empty? && !params["affiliation"].empty?
+      @ship = Ship.find_by(id=params[:id])
+      @agent = Helpers.current_agent(session)
+      @ship.update(type_class: params["type_class"], top_speed: params["top_speed"], crew: params["crew"], affiliation: params["affiliation"])
+      @ship.agent_id = @agent.id
+      @ship.save
+      redirect "/all"
+    end
+  end
+
+  get "/ship/:id/delete" do
+    @agent = Helpers.current_agent(session)
+    @ship = Ship.find_by(id: params[:id])
+    if Helpers.is_logged_in?(session) && @ship.agent_id == @agent.id
+      erb :delete
+    else
+      #flash message about not owning the record
+      redirect "/ship/:id"
+    end
+  end
+
+  post "/ship/:id/delete" do
+    @agent = Helpers.current_agent(session)
+    @ship = Ship.find_by(id: params[:id])
+    binding.pry
+    if Helpers.is_logged_in?(session) && @ship.agent_id == @agent.id
+      @ship.delete
+      # flash message confirming action
+      redirect "/all"
+    else
+      # flash message about not owning the record
+      redirect "/ship/:id"
     end
   end
 
@@ -75,29 +131,8 @@ class ApplicationController < Sinatra::Base
       @ship = Ship.find_by(id: params[:id])
       erb :ship
     else
+      # flash message about must be logged in
       redirect "/login"
-    end
-  end
-
-  get "/ship/:id/edit" do
-    @agent = Helpers.current_agent(session)
-    @ship = Ship.find_by(id=params[:id])
-    # binding.pry
-    if Helpers.is_logged_in?(session) && @ship.agent_id == @agent.id
-      erb :edit
-    else
-      redirect "/ship/:id"
-    end
-  end
-
-  post "/ship/:id/edit" do
-    if !params["type_class"].empty? && !params["affiliation"].empty?
-      @ship.find_by(id=params[:id])
-      @agent = Helpers.current_agent(session)
-      @ship.update(type_class: params["type_class"], top_speed: params["top_speed"], crew: params["crew"], affiliation: params["affiliation"])
-      @ship.agent_id = @agent.id
-      @ship.save
-      redirect "/all"
     end
   end
 
