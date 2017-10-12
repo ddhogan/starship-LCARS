@@ -5,7 +5,7 @@
     <div class="content">
       <ul>
       <% @ships.each do |ship|%>
-        <li><%= ship.type_class%>: <%= ship.affiliation%> <a href="/show/<%= ship.id%>">Details</a></li>
+        <li><%= ship.type_class%>: <%= ship.affiliation%> <a href="/ship/<%= ship.id%>">Details</a></li>
       <% end%>
       </ul>
     </div>

@@ -1,6 +1,6 @@
 <div class="container">
 <div class="col-md-8 col-md-offset-2">
-  <h2>Details for the <%= @ship.type_class%> vessel</h2>
+  <h2>Details for this <%= @ship.type_class%> class vessel</h2>
 
   <div class="content">
     <ul>
@@ -15,6 +15,7 @@
     </ul>
   </div>
 
+  <a href="/ship/<%= @ship.id%>/edit"><button><h4>Edit this entry</h4></button></a>
   <a href="/all"><button><h4>Return to index</h4></button></a>
   <a href="/"><button><h4>Home</h4></button></a>
   <br></br>

@@ -18,18 +18,30 @@ class ApplicationController < Sinatra::Base
   end
 
   post "/signup" do
-    @agent = Agent.create(username: params[:username], password: params[:password])
-    session[:id] = @agent.id # @agent is now logged in
-    redirect "/all"
+    if !params['username'].empty? && !params['password'].empty?
+      @agent = Agent.create(username: params[:username], password: params[:password])
+      session[:id] = @agent.id # @agent is now logged in
+      redirect "/all"
+      @agent.save
+    else
+      redirect "/signup"
+    end
   end
 
   get "/new" do
-    erb :new
+    if Helpers.is_logged_in?(session)
+      erb :new
+    else
+      redirect "/login"
+    end
   end
 
   post "/all" do
     if !params["type_class"].empty? && !params["affiliation"].empty?
-      Ship.create(type_class: params["type_class"], top_speed: params["top_speed"], crew: params["crew"], affiliation: params["affiliation"])
+      @agent = Helpers.current_agent(session)
+      @ship = Ship.create(type_class: params["type_class"], top_speed: params["top_speed"], crew: params["crew"], affiliation: params["affiliation"])
+      @ship.agent_id = @agent.id
+      @ship.save
       redirect "/all"
     end
   end
@@ -40,7 +52,7 @@ class ApplicationController < Sinatra::Base
 
   post "/login" do
     @agent = Agent.find_by(username: params["username"])
-
+    
     if @agent && @agent.authenticate(params[:password])
       session[:id] = @agent.id # @agent is now logged in
       redirect '/all'
@@ -58,12 +70,34 @@ class ApplicationController < Sinatra::Base
     end
   end
 
-  get "/show/:id" do
+  get "/ship/:id" do
     if Helpers.is_logged_in?(session)
       @ship = Ship.find_by(id: params[:id])
-      erb :show
+      erb :ship
     else
       redirect "/login"
+    end
+  end
+
+  get "/ship/:id/edit" do
+    @agent = Helpers.current_agent(session)
+    @ship = Ship.find_by(id=params[:id])
+    # binding.pry
+    if Helpers.is_logged_in?(session) && @ship.agent_id == @agent.id
+      erb :edit
+    else
+      redirect "/ship/:id"
+    end
+  end
+
+  post "/ship/:id/edit" do
+    if !params["type_class"].empty? && !params["affiliation"].empty?
+      @ship.find_by(id=params[:id])
+      @agent = Helpers.current_agent(session)
+      @ship.update(type_class: params["type_class"], top_speed: params["top_speed"], crew: params["crew"], affiliation: params["affiliation"])
+      @ship.agent_id = @agent.id
+      @ship.save
+      redirect "/all"
     end
   end
 
