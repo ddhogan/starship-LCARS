@@ -1,6 +1,7 @@
 require './config/environment'
 
 class ApplicationController < Sinatra::Base
+  use Rack::Flash
 
   configure do
     set :public_folder, 'public'
@@ -33,7 +34,7 @@ class ApplicationController < Sinatra::Base
     if Helpers.is_logged_in?(session)
       erb :new
     else
-      # flash message about being logged in
+      flash[:message] = "You must be logged in to add a record."
       redirect "/login"
     end
   end
@@ -62,7 +63,7 @@ class ApplicationController < Sinatra::Base
       session[:id] = @agent.id # @agent is now logged in
       redirect '/all'
     else
-      # flash message about must be logged in
+      flash[:message] = "You must be logged in for this action."
       erb :login
     end
   end
@@ -72,7 +73,7 @@ class ApplicationController < Sinatra::Base
       @ships = Ship.all
       erb :"/all"
     else
-      # flash message about must be logged in
+      flash[:message] = "You must be logged in for this action."
       redirect "/login"
     end
   end
@@ -84,7 +85,7 @@ class ApplicationController < Sinatra::Base
     if Helpers.is_logged_in?(session) && @ship.agent_id == @agent.id
       erb :edit
     else
-      # flash message about not owning the record
+      flash[:message] = "This action is unauthorized (belongs to another agent)."
       redirect "/ship/:id"
     end
   end
@@ -107,7 +108,7 @@ class ApplicationController < Sinatra::Base
     if Helpers.is_logged_in?(session) && @ship.agent_id == @agent.id
       erb :delete
     else
-      #flash message about not owning the record
+      flash[:message] = "This action is unauthorized (belongs to another agent)."
       redirect "/ship/:id"
     end
   end
@@ -115,25 +116,34 @@ class ApplicationController < Sinatra::Base
   post "/ship/:id/delete" do
     @agent = Helpers.current_agent(session)
     @ship = Ship.find_by(id: params[:id])
-    binding.pry
+    # binding.pry
     if Helpers.is_logged_in?(session) && @ship.agent_id == @agent.id
       @ship.delete
-      # flash message confirming action
+      flash[:message] = "The record has been deleted."
       redirect "/all"
     else
-      # flash message about not owning the record
+      flash[:message] = "This action is unauthorized (belongs to another agent)."
       redirect "/ship/:id"
     end
   end
 
   get "/ship/:id" do
+    # binding.pry
     if Helpers.is_logged_in?(session)
       @ship = Ship.find_by(id: params[:id])
       erb :ship
     else
-      # flash message about must be logged in
+      flash[:message] = "You must be logged in for this action."
       redirect "/login"
     end
+  end
+
+  get "/logout" do
+    if Helpers.is_logged_in?(session)
+      session.clear # @agent is now logged out
+    end
+    flash[:message] = "You have been logged out."
+    redirect '/'
   end
 
   get "/" do
