@@ -86,7 +86,7 @@ class ApplicationController < Sinatra::Base
       erb :edit
     else
       flash[:message] = "This action is unauthorized (belongs to another agent)."
-      redirect "/ship/:id"
+      redirect "/ship/#{@ship.id}"
     end
   end
 
@@ -105,11 +105,12 @@ class ApplicationController < Sinatra::Base
   get "/ship/:id/delete" do
     @agent = Helpers.current_agent(session)
     @ship = Ship.find_by(id: params[:id])
+    # binding.pry
     if Helpers.is_logged_in?(session) && @ship.agent_id == @agent.id
       erb :delete
     else
       flash[:message] = "This action is unauthorized (belongs to another agent)."
-      redirect "/ship/:id"
+      redirect "/ship/#{@ship.id}"
     end
   end
 
@@ -123,7 +124,7 @@ class ApplicationController < Sinatra::Base
       redirect "/all"
     else
       flash[:message] = "This action is unauthorized (belongs to another agent)."
-      redirect "/ship/:id"
+      redirect "/ship/#{@ship.id}"
     end
   end
 
