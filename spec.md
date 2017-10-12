@@ -23,5 +23,5 @@ To Do
 * [ ] add all the additional fields to erb new, edit, and ship, plus corresponding routes
 * [ ] make a helper method to validate data (mandatory fields filled in, and correct data type)
 * [ ] mark mandatory fields in new and edit
-* [ ] add flash messages "must be logged in", or "can't edit other agent's records" in various places (add the flash message thingy to the layout)
+* [X] ~~*add flash messages "must be logged in", or "can't edit other agent's records" in various places (add the flash message thingy to the layout)*~~
 * [ ] add flash messages for errors when fields are left empty, or data is incorrect format
