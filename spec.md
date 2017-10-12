@@ -19,9 +19,7 @@ Confirm
 
 
 To Do
-* [ ] change top speed to text, and then convert to float when needed
 * [ ] add all the additional fields to erb new, edit, and ship, plus corresponding routes
-* [ ] make a helper method to validate data (mandatory fields filled in, and correct data type)
 * [ ] mark mandatory fields in new and edit
-* [X] ~~*add flash messages "must be logged in", or "can't edit other agent's records" in various places (add the flash message thingy to the layout)*~~
+* [ ] make a helper method to validate data (mandatory fields filled in, and correct data type)
 * [ ] add flash messages for errors when fields are left empty, or data is incorrect format

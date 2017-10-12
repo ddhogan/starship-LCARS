@@ -132,6 +132,7 @@ class ApplicationController < Sinatra::Base
     # binding.pry
     if Helpers.is_logged_in?(session)
       @ship = Ship.find_by(id: params[:id])
+      @agent = Agent.find_by(id: @ship.agent_id)
       erb :ship
     else
       flash[:message] = "You must be logged in for this action."
