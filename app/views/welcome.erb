@@ -12,8 +12,8 @@
     <div class="sidebar">
       <h3>Menu</h3>
       <ul>
-        <% if Helpers.is_logged_in?(session)%>
-          <li><a href="/all"><button><h4>Index</h4></button></a></li><br>
+        <% if is_logged_in?%>
+          <li><a href="/ships"><button><h4>Index</h4></button></a></li><br>
           <li><a href="/logout"><button><h4>Log Out</h4></button></a></li><br>
         <% else%>
           <li><a href="/signup"><button><h4>Sign Up</h4></button></a></li><br>

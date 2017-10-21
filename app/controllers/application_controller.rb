@@ -11,7 +11,7 @@ class ApplicationController < Sinatra::Base
   end
 
   get "/signup" do
-    if Helpers.is_logged_in?(session)
+    if is_logged_in?
       redirect "/all"
     else
       erb :signup
@@ -19,11 +19,13 @@ class ApplicationController < Sinatra::Base
   end
 
   post "/signup" do
-    if !params['username'].empty? && !params['password'].empty?
+    if Agent.find_by(username: params['username'])
+      flash[:message] = "Username already exists."
+      redirect "/signup"
+    elsif !params['username'].empty? && !params['password'].empty?
       @agent = Agent.create(username: params[:username], password: params[:password])
-      session[:id] = @agent.id # @agent is now logged in
-      redirect "/all"
-      @agent.save
+      session[:agent_id] = @agent.id
+      redirect "/ships"
     else
       flash[:message] = "Both fields must be completed."
       redirect "/signup"
@@ -31,7 +33,7 @@ class ApplicationController < Sinatra::Base
   end
 
   get "/new" do
-    if Helpers.is_logged_in?(session)
+    if is_logged_in?
       erb :new
     else
       flash[:message] = "You must be logged in to add a record."
@@ -39,16 +41,12 @@ class ApplicationController < Sinatra::Base
     end
   end
 
-  post "/all" do
+  post "/ships" do
     if !params["ship"]["type_class"].empty? && !params["ship"]["affiliation"].empty?
-      @agent = Helpers.current_agent(session)
-      # binding.pry
-
       @ship = Ship.create(params[:ship])
-
-      @ship.agent_id = @agent.id
+      @ship.agent_id = current_agent.id
       @ship.save
-      redirect "/all"
+      redirect "/ships"
     else
       flash[:message] = "Confirm that all mandatory fields have been filled."
       redirect "/new"
@@ -63,84 +61,79 @@ class ApplicationController < Sinatra::Base
     @agent = Agent.find_by(username: params["username"])
     
     if @agent && @agent.authenticate(params[:password])
-      session[:id] = @agent.id # @agent is now logged in
-      redirect '/all'
+      session[:agent_id] = @agent.id # @agent is now logged in
+      redirect '/ships'
     else
       flash[:message] = "You must be logged in for this action."
       erb :login
     end
   end
 
-  get "/all" do
-    if Helpers.is_logged_in?(session)
+  get "/ships" do
+    if is_logged_in?
       @ships = Ship.all
-      erb :"/all"
+      erb :"/index"
     else
       flash[:message] = "You must be logged in for this action."
       redirect "/login"
     end
   end
 
-  get "/ship/:id/edit" do
-    @agent = Helpers.current_agent(session)
+  get "/ships/:id/edit" do
     @ship = Ship.find_by(id: params[:id])
-    # binding.pry
-    if Helpers.is_logged_in?(session) && @ship.agent_id == @agent.id
+    if is_logged_in? && @ship.agent_id == current_agent.id
       erb :edit
     else
       flash[:message] = "This action is unauthorized (belongs to another agent)."
-      redirect "/ship/#{@ship.id}"
+      redirect "/ships/#{@ship.id}"
     end
   end
 
-  patch "/ship/:id" do
-    # binding.pry
+  patch "/ships/:id" do
     if !params["ship"]["type_class"].empty? && !params["ship"]["affiliation"].empty?
       @ship = Ship.find_by(id: params[:id])
-      @agent = Helpers.current_agent(session)
       
       @ship.update(params["ship"])
-      @ship.agent_id = @agent.id
-      @ship.save
-      redirect "/all"
+    
+      redirect "/ships"
     else
       flash[:message] = "Confirm that all mandatory fields have been filled."
-      redirect "/ship/#{@ship.id}/edit"
+      redirect "/ships/#{@ship.id}/edit"
     end
   end
 
-  get "/ship/:id/delete" do
-    @agent = Helpers.current_agent(session)
+  get "/ships/:id/delete" do
+    @agent = current_agent
     @ship = Ship.find_by(id: params[:id])
-    # binding.pry
-    if Helpers.is_logged_in?(session) && @ship.agent_id == @agent.id
+    if is_logged_in? && @ship.agent_id == @agent.id
       erb :delete
     else
       flash[:message] = "This action is unauthorized (belongs to another agent)."
-      redirect "/ship/#{@ship.id}"
+      redirect "/ships/#{@ship.id}"
     end
   end
 
-  post "/ship/:id/delete" do
-    @agent = Helpers.current_agent(session)
+  post "/ships/:id/delete" do
+    @agent = current_agent
     @ship = Ship.find_by(id: params[:id])
-    # binding.pry
-    if Helpers.is_logged_in?(session) && @ship.agent_id == @agent.id
+    if is_logged_in? && @ship.agent_id == @agent.id
       @ship.delete
       flash[:message] = "The record has been deleted."
-      redirect "/all"
+      redirect "/ships"
     else
       flash[:message] = "This action is unauthorized (belongs to another agent)."
-      redirect "/ship/#{@ship.id}"
+      redirect "/ships/#{@ship.id}"
     end
   end
 
-  get "/ship/:id" do
-    # binding.pry
-    if Helpers.is_logged_in?(session)
-      @ship = Ship.find_by(id: params[:id])
-      @agent = Agent.find_by(id: @ship.agent_id)
-      erb :ship
+  get "/ships/:id" do
+    if is_logged_in?
+      if @ship = Ship.find_by(id: params[:id])
+        erb :show
+      else 
+        flash[:message] = "A ship with the id of #{params[:id]} does not exist!"
+        redirect to '/ships'
+      end
     else
       flash[:message] = "You must be logged in for this action."
       redirect "/login"
@@ -148,7 +141,7 @@ class ApplicationController < Sinatra::Base
   end
 
   get "/logout" do
-    if Helpers.is_logged_in?(session)
+    if is_logged_in?
       session.clear
       flash[:message] = "You have been logged out."
       redirect '/'
@@ -162,6 +155,16 @@ class ApplicationController < Sinatra::Base
   not_found do
     status 404
     erb :custom_error
+  end
+
+  helpers do 
+    def current_agent
+      Agent.find_by(id: session[:agent_id])
+    end
+
+    def is_logged_in?
+      !!current_agent
+    end
   end
 
 end

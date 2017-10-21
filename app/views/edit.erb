@@ -3,7 +3,7 @@
   <h2>Edit information about this vessel</h2>
 
   <div class="content">
-    <form method="post" action="/ship/<%= @ship.id%>">
+    <form method="post" action="/ships/<%= @ship.id%>">
     <input id="hidden" type="hidden" name="_method" value="patch">
         <label>Type/class: </label><input name="ship[type_class]" type="text" value="<%= @ship.type_class%>">*<br>
         <label>Sub-class: </label><input name="ship[sub_class]" type="text" value="<%= @ship.sub_class%>"><br>
@@ -15,7 +15,7 @@
         <br>
         <input name="submit" type="submit">
     </form>
-    <h3>Or, delete this record <a href="/ship/<%= @ship.id%>/delete"><button><h4>Delete</h4></button></a></h3>    
+    <h3>Or, delete this record <a href="/ships/<%= @ship.id%>/delete"><button><h4>Delete</h4></button></a></h3>    
 
   </div>
 

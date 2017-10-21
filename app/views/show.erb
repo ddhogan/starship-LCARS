@@ -10,14 +10,16 @@
         <li>Top speed, warp factor: <%= @ship.top_speed%></li>
         <li>Crew complement: <%= @ship.crew%></li>
         <li>Notes: <%= @ship.note%></li>
-
-        <li>Reference Agent: <%= @agent.username%></li>
+        <li>Reference Agent: <%= @ship.agent.username%></li>
     </ul>
   </div>
 
-  <a href="/ship/<%= @ship.id%>/edit"><button><h4>Edit this entry</h4></button></a>
-  <a href="/ship/<%= @ship.id%>/delete"><button><h4>Delete</h4></button></a>
-  <a href="/all"><button><h4>Return to index</h4></button></a>
+  <% if @ship.agent == current_agent %>
+    <a href="/ships/<%= @ship.id %>/edit"><button><h4>Edit this entry</h4></button></a>
+    <a href="/ships/<%= @ship.id %>/delete"><button><h4>Delete</h4></button></a>
+  <% end %>
+  
+    <a href="/ships"><button><h4>Return to index</h4></button></a>
   <a href="/logout"><button><h4>Log Out</h4></button></a></li>
   <a href="/"><button><h4>Home</h4></button></a>
   <br></br>
