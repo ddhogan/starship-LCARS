@@ -1,4 +1,4 @@
-class Ships < ActiveRecord::Migration
+class Ships < ActiveRecord::Migration[4.2]
   def change
     create_table :ships do |t|
       t.string :type_class

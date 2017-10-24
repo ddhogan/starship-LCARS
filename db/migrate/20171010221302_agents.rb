@@ -1,4 +1,4 @@
-class Agents < ActiveRecord::Migration
+class Agents < ActiveRecord::Migration[4.2]
   def change
     create_table :agents do |t|
       t.string :username

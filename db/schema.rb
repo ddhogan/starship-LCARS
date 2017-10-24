@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -19,13 +18,13 @@ ActiveRecord::Schema.define(version: 20171010221302) do
   end
 
   create_table "ships", force: :cascade do |t|
-    t.string  "type_class"
-    t.string  "sub_class"
+    t.string "type_class"
+    t.string "sub_class"
     t.decimal "top_speed"
     t.integer "crew"
-    t.string  "affiliation"
+    t.string "affiliation"
     t.integer "agent_id"
-    t.string  "note"
+    t.string "note"
   end
 
 end
