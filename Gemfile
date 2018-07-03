@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'sinatra' ~> 2.0.2
+gem 'sinatra', '~> 2.0.2'
 gem 'activerecord', :require => 'active_record'
 gem 'sinatra-activerecord', :require => 'sinatra/activerecord'
 gem 'rake'
@@ -12,7 +12,7 @@ gem 'pry'
 gem 'bcrypt'
 gem "tux"
 gem 'rack-flash3'
-gem 'nokogiri' ~> 1.8.2
+gem 'nokogiri', '~> 1.8.2'
 
 group :test do
   gem 'rspec'
