@@ -11,8 +11,11 @@ gem 'shotgun'
 gem 'pry'
 gem 'bcrypt'
 gem "tux"
+
+# updating dependencies for security
 gem 'rack-flash3'
 gem 'nokogiri', '~> 1.8.2'
+gem 'sprockets', '~> 3.7.2'
 
 group :test do
   gem 'rspec'
