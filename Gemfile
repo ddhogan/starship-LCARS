@@ -14,7 +14,7 @@ gem "tux"
 
 # updating dependencies for security
 gem 'rack-flash3'
-gem 'nokogiri', '~> 1.10.4'
+gem 'nokogiri', '~> 1.10.8'
 gem 'sprockets', '~> 3.7.2'
 
 group :test do
